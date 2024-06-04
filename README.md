@@ -53,3 +53,11 @@ print(device_lib.list_local_devices())
 
 ```
 
+Verify access to the GPU, which is useful for training the neural network faster.
+
+#### Dataset
+The dataset used for this project is a smaller vocabulary set compared to the WMT datasets, allowing for reasonable training time.
+
+Load Data
+Load the English and French data from data/small_vocab_en and data/small_vocab_fr.
+
