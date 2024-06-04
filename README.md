@@ -28,7 +28,7 @@ Preprocess text by converting it to sequences of integers.
 Create models to accept sequences of integers as input and return a probability distribution over possible translations.
 Design and experiment with different neural network architectures.
 Run the model on English text to predict French translations.
-Setup
+#### Setup
 Ensure you have the necessary libraries installed, including keras, tensorflow, numpy, and other dependencies. Load the helper functions and tests.
 
 ```python
