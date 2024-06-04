@@ -21,8 +21,7 @@ Submission
 Optional Enhancements
 
 #### Introduction
-In this notebook, sections ending with '(IMPLEMENTATION)' indicate that the following blocks of code will require additional functionality which you must provide. Please read the instructions carefully!
-
+In this notebook, sections ending with '(IMPLEMENTATION)' indicate that the following blocks of code will require additional functionality which you must provide. 
 You will:
 
 Preprocess text by converting it to sequences of integers.
