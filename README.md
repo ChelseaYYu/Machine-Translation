@@ -5,14 +5,22 @@ This project involves building a deep neural network as part of an end-to-end ma
 
 #### Table of Contents
 Introduction
+
 Setup
+
 Dataset
+
 Preprocessing
+
 Models
+
 Prediction
+
 Submission
+
 Optional Enhancements
-Introduction
+
+#### Introduction
 In this notebook, sections ending with '(IMPLEMENTATION)' indicate that the following blocks of code will require additional functionality which you must provide. Please read the instructions carefully!
 
 You will:
