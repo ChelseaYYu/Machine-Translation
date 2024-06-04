@@ -3,7 +3,7 @@
 ### Overview
 This project involves building a deep neural network as part of an end-to-end machine translation pipeline. The pipeline will accept English text as input and return the corresponding French translation.
 
-Table of Contents
+#### Table of Contents
 Introduction
 Setup
 Dataset
