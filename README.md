@@ -195,8 +195,19 @@ tests.test_encdec_model(encdec_model)
 ```
 ##### Model 5: Custom Model (IMPLEMENTATION)
 Create a model that incorporates embedding, bidirectional RNN, and encoder-decoder architecture.
-
+###### Encoder with Bidirectional LSTMs
+The encoder comprises two LSTM layers that process the input sequence in both forward and backward directions. The states from both directions are concatenated to form the context vector.
 ```python
+forward_encoder_output, forward_state_h, forward_state_c = LSTM(units=256, 
+                                                                return_sequences=False,
+                                                                return_state=True, 
+                                                                go_backwards=False)(encoder_embedding)
+backward_encoder_output, backward_state_h, backward_state_c = LSTM(units=256, 
+                                                                   return_sequences=False,
+                                                                   return_state=True, 
+                                                                   go_backwards=True)(encoder_embedding)
+
+```
 
 def model_final(input_shape, output_sequence_length, english_vocab_size, french_vocab_size):
     learning_rate = 1e-3
