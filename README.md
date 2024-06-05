@@ -16,9 +16,6 @@ Models
 
 Prediction
 
-Submission
-
-Optional Enhancements
 
 #### Introduction
 In this notebook, sections ending with '(IMPLEMENTATION)' indicate that the following blocks of code will require additional functionality which you must provide. 
@@ -73,7 +70,7 @@ Each line in small_vocab_en contains an English sentence, and each line in small
 Vocabulary
 Inspect the complexity of the dataset by analyzing the number of unique words in both English and French sentences.
 
-python
+```python
 Copy code
 english_words_counter = collections.Counter([word for sentence in english_sentences for word in sentence.split()])
 french_words_counter = collections.Counter([word for sentence in french_sentences for word in sentence.split()])
@@ -87,7 +84,8 @@ print('{} French words.'.format(len([word for sentence in french_sentences for w
 print('{} unique French words.'.format(len(french_words_counter)))
 print('10 Most common words in the French dataset:')
 print('"' + '" "'.join(list(zip(*french_words_counter.most_common(10)))[0]) + '"')
-Preprocessing
+```
+#### Preprocessing
 Convert text into sequences of integers and add padding to make all sequences the same length.
 
 Tokenize (IMPLEMENTATION)
@@ -141,7 +139,7 @@ print("Max English sentence length:", max_english_sequence_length)
 print("Max French sentence length:", max_french_sequence_length)
 print("English vocabulary size:", english_vocab_size)
 print("French vocabulary size:", french_vocab_size)
-Models
+#### Models
 Experiment with various neural network architectures, including RNN, embedding RNN, bidirectional RNN, encoder-decoder, and a custom model combining these features.
 
 Model 1: Simple RNN (IMPLEMENTATION)
@@ -221,6 +219,33 @@ def model_final(input_shape, output_sequence_length, english_vocab_size, french_
     return model
 
 tests.test_model_final(model_final)
-Prediction
+#### Prediction
 Train the final model and get predictions.
+```python
+def final_predictions(x, y, x_tk, y_tk):
+    model = model_final(
+        x.shape,
+        y.shape[1],
+        len(x_tk.word_index)+1,
+        len(y_tk.word_index)+1)
+    model.fit(x, y, batch_size=512, epochs=20, validation_split=0.2)
+    
+    y_id_to_word = {value: key for key, value in y_tk.word_index.items()}
+    y_id_to_word[0] = '<PAD>'
+    
+    sentence = 'he saw a old yellow truck'
+    sentence = [x_tk.word_index[word] for word in sentence.split()]
+    sentence = pad_sequences([sentence], maxlen=x.shape[-1], padding='post')
+    sentences = np.array([sentence[0], x[0]])
+    predictions = model.predict(sentences, len(sentences))
+    
+    print('Sample 1:')
+    print(' '.join([y_id_to_word[np.argmax(x)] for x in predictions[0]]))
+    print('Il a vu un vieux camion jaune')
+    print('Sample 2:')
+    print(' '.join([y_id_to_word[np.argmax(x)] for x in predictions[1]]))
+    print(' '.join([y_id_to_word[np.max(x)] for x in y[0]]))
+
+final_predictions(preproc_english_sentences, preproc_french_sentences, english_tokenizer, french_tokenizer)
+```
 
