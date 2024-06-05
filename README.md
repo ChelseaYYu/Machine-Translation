@@ -55,7 +55,7 @@ Verify access to the GPU, which is useful for training the neural network faster
 #### Dataset
 The dataset used for this project is a smaller vocabulary set compared to the WMT datasets, allowing for reasonable training time.
 
-Load Data
+##### Load Data
 Load the English and French data from data/small_vocab_en and data/small_vocab_fr.
 
 ```python
@@ -64,31 +64,22 @@ french_sentences = helper.load_data('data/small_vocab_fr')
 print('Dataset Loaded')
 ```
 
-Files
+##### Files
 Each line in small_vocab_en contains an English sentence, and each line in small_vocab_fr contains the respective French translation.
 
-Vocabulary
+##### Vocabulary
 Inspect the complexity of the dataset by analyzing the number of unique words in both English and French sentences.
 
 ```python
-Copy code
 english_words_counter = collections.Counter([word for sentence in english_sentences for word in sentence.split()])
 french_words_counter = collections.Counter([word for sentence in french_sentences for word in sentence.split()])
 
-print('{} English words.'.format(len([word for sentence in english_sentences for word in sentence.split()])))
-print('{} unique English words.'.format(len(english_words_counter)))
-print('10 Most common words in the English dataset:')
-print('"' + '" "'.join(list(zip(*english_words_counter.most_common(10)))[0]) + '"')
-print()
-print('{} French words.'.format(len([word for sentence in french_sentences for word in sentence.split()])))
-print('{} unique French words.'.format(len(french_words_counter)))
-print('10 Most common words in the French dataset:')
-print('"' + '" "'.join(list(zip(*french_words_counter.most_common(10)))[0]) + '"')
+
 ```
 #### Preprocessing
 Convert text into sequences of integers and add padding to make all sequences the same length.
 
-Tokenize (IMPLEMENTATION)
+##### Tokenize (IMPLEMENTATION)
 Convert sentences into sequences of word ids using Keras's Tokenizer function.
 
 ```python
@@ -102,6 +93,7 @@ tests.test_tokenize(tokenize)
 Padding (IMPLEMENTATION)
 Pad sequences to ensure they are of equal length.
 ```
+
 ```python
 
 def pad(x, length=None):
@@ -115,11 +107,10 @@ def pad(x, length=None):
 
 tests.test_pad(pad)
 ```
-Preprocess Pipeline
+##### Preprocess Pipeline
 Provided function to preprocess both English and French sentences.
 
-python
-Copy code
+```python
 def preprocess(x, y):
     preprocess_x, x_tk = tokenize(x)
     preprocess_y, y_tk = tokenize(y)
@@ -134,19 +125,14 @@ max_french_sequence_length = preproc_french_sentences.shape[1]
 english_vocab_size = len(english_tokenizer.word_index)
 french_vocab_size = len(french_tokenizer.word_index)
 
-print('Data Preprocessed')
-print("Max English sentence length:", max_english_sequence_length)
-print("Max French sentence length:", max_french_sequence_length)
-print("English vocabulary size:", english_vocab_size)
-print("French vocabulary size:", french_vocab_size)
+```
 #### Models
 Experiment with various neural network architectures, including RNN, embedding RNN, bidirectional RNN, encoder-decoder, and a custom model combining these features.
 
-Model 1: Simple RNN (IMPLEMENTATION)
+##### Model 1: Simple RNN (IMPLEMENTATION)
 Build and train a basic RNN model.
 
-python
-Copy code
+```python
 def simple_model(input_shape, output_sequence_length, english_vocab_size, french_vocab_size):
     learning_rate = 1e-3
     model = Sequential()
@@ -156,11 +142,11 @@ def simple_model(input_shape, output_sequence_length, english_vocab_size, french
     return model
 
 tests.test_simple_model(simple_model)
-Model 2: Embedding RNN (IMPLEMENTATION)
+```
+##### Model 2: Embedding RNN (IMPLEMENTATION)
 Use word embeddings in a RNN model.
 
-python
-Copy code
+```python
 def embed_model(input_shape, output_sequence_length, english_vocab_size, french_vocab_size):
     learning_rate = 1e-3
     model = Sequential()
@@ -171,11 +157,12 @@ def embed_model(input_shape, output_sequence_length, english_vocab_size, french_
     return model
 
 tests.test_embed_model(embed_model)
-Model 3: Bidirectional RNN (IMPLEMENTATION)
+```
+##### Model 3: Bidirectional RNN (IMPLEMENTATION)
 Build a bidirectional RNN model.
 
-python
-Copy code
+```python
+
 def bd_model(input_shape, output_sequence_length, english_vocab_size, french_vocab_size):
     learning_rate = 0.001
     model = Sequential([
@@ -189,9 +176,9 @@ def bd_model(input_shape, output_sequence_length, english_vocab_size, french_voc
 tests.test_bd_model(bd_model)
 Model 4: Encoder-Decoder (IMPLEMENTATION)
 Build an encoder-decoder model.
+```
+```python
 
-python
-Copy code
 def encdec_model(input_shape, output_sequence_length, english_vocab_size, french_vocab_size):
     learning_rate = 0.001
     encoder_input_seq = Input(shape=input_shape[1:])
@@ -202,7 +189,7 @@ def encdec_model(input_shape, output_sequence_length, english_vocab_size, french
     model = Model(encoder_input_seq, Activation('softmax')(logits))
     model.compile(loss=sparse_categorical_crossentropy, optimizer=Adam(lr=learning_rate), metrics=['accuracy'])
     return model
-
+```
 tests.test_encdec_model(encdec_model)
 Model 5: Custom Model (IMPLEMENTATION)
 Create a model that incorporates embedding, bidirectional RNN, and encoder-decoder architecture.
