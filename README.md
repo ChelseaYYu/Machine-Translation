@@ -195,7 +195,9 @@ tests.test_encdec_model(encdec_model)
 ```
 ##### Model 5: Custom Model (IMPLEMENTATION)
 Create a model that incorporates embedding, bidirectional RNN, and encoder-decoder architecture.
-###### Encoder with Bidirectional LSTMs
+
+Encoder with Bidirectional LSTMs
+
 The encoder comprises two LSTM layers that process the input sequence in both forward and backward directions. The states from both directions are concatenated to form the context vector.
 ```python
 forward_encoder_output, forward_state_h, forward_state_c = LSTM(units=256, 
@@ -209,16 +211,17 @@ backward_encoder_output, backward_state_h, backward_state_c = LSTM(units=256,
 
 ```
 
-def model_final(input_shape, output_sequence_length, english_vocab_size, french_vocab_size):
-    learning_rate = 1e-3
-    model = Sequential()
-    model.add(Embedding(input_dim=english_vocab_size, output_dim=400, input_length=input_shape[1:][0]))
-    model.add(Bidirectional(GRU(units=400, return_sequences=True)))
-    model.add(TimeDistributed(Dense(french_vocab_size, activation='softmax')))
-    model.compile(loss=sparse_categorical_crossentropy, optimizer=Adam(lr=learning_rate), metrics=['accuracy'])
-    return model
+Decoder with LSTM
 
-tests.test_model_final(model_final)
+The decoder initializes its states with the concatenated states from the bidirectional LSTM. It repeats the context vector and generates the output sequence.
+```python
+state_h = concatenate([forward_state_h, backward_state_h])
+state_c = concatenate([forward_state_c, backward_state_c])
+encoder_output = concatenate([forward_encoder_output, backward_encoder_output])
+decoder_input_seq = RepeatVector(output_sequence_length)(encoder_output)
+decoder_out = LSTM(units=512,
+                   return_sequences=True,
+                   return_state=False)(decoder_input_seq, initial_state=[state_h, state_c])
 ```
 #### Prediction
 Train the final model and get predictions.
