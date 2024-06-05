@@ -174,9 +174,10 @@ def bd_model(input_shape, output_sequence_length, english_vocab_size, french_voc
     return model
 
 tests.test_bd_model(bd_model)
-Model 4: Encoder-Decoder (IMPLEMENTATION)
-Build an encoder-decoder model.
 ```
+##### Model 4: Encoder-Decoder (IMPLEMENTATION)
+Build an encoder-decoder model.
+
 ```python
 
 def encdec_model(input_shape, output_sequence_length, english_vocab_size, french_vocab_size):
@@ -189,13 +190,14 @@ def encdec_model(input_shape, output_sequence_length, english_vocab_size, french
     model = Model(encoder_input_seq, Activation('softmax')(logits))
     model.compile(loss=sparse_categorical_crossentropy, optimizer=Adam(lr=learning_rate), metrics=['accuracy'])
     return model
-```
+
 tests.test_encdec_model(encdec_model)
-Model 5: Custom Model (IMPLEMENTATION)
+```
+##### Model 5: Custom Model (IMPLEMENTATION)
 Create a model that incorporates embedding, bidirectional RNN, and encoder-decoder architecture.
 
-python
-Copy code
+```python
+
 def model_final(input_shape, output_sequence_length, english_vocab_size, french_vocab_size):
     learning_rate = 1e-3
     model = Sequential()
@@ -206,6 +208,7 @@ def model_final(input_shape, output_sequence_length, english_vocab_size, french_
     return model
 
 tests.test_model_final(model_final)
+```
 #### Prediction
 Train the final model and get predictions.
 ```python
